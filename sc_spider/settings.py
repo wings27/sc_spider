@@ -19,7 +19,7 @@ NEWSPIDER_MODULE = 'sc_spider.spiders'
 #USER_AGENT = 'sc_spider (+http://www.yourdomain.com)'
 
 # Obey robots.txt rules
-ROBOTSTXT_OBEY = False
+ROBOTSTXT_OBEY = True
 
 FEED_EXPORTERS = {
     'json': 'sc_spider.item_exporter.UnicodeJsonItemExporter'
