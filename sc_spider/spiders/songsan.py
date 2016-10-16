@@ -40,12 +40,12 @@ class SongSanSpider(scrapy.Spider):
     @staticmethod
     def _parse_item(link):
         item = SongCiItem()
-        item['url'] = link.xpath('@href').extract() or None
+        item['url'] = link.xpath('@href').extract_first()
         title_author = link.xpath('text()').re('(.+)\((.+)\)')
         if title_author:
             item['title'] = title_author[0]
             item['author'] = title_author[1]
         else:
-            item['title'] = link.xpath('text()').extract()
+            item['title'] = link.xpath('text()').extract_first()
 
         return item
