@@ -29,13 +29,10 @@ class SongSanSpider(scrapy.Spider):
             self.logger.info('page save: %s', filename)
 
         cont2s = response.xpath('//div[@class="guwencont2"]')
-        items = []
         for cont2 in cont2s:
             links = cont2.xpath('a')
             for link in links:
-                items.append(self._parse_item(link))
-
-        return items
+                yield self._parse_item(link)
 
     @staticmethod
     def _parse_item(link):
