@@ -32,17 +32,20 @@ class SongSanSpider(scrapy.Spider):
         for cont2 in cont2s:
             links = cont2.xpath('a')
             for link in links:
-                yield self._parse_item(link)
+                url = link.xpath('@href').extract_first()
+                if url is not None:
+                    next_url = response.urljoin(url)
+                    yield scrapy.Request(next_url, callback=SongSanSpider.parse_songci)
 
     @staticmethod
-    def _parse_item(link):
+    def parse_songci(response):
         item = SongCiItem()
-        item['url'] = link.xpath('@href').extract_first()
-        title_author = link.xpath('text()').re('(.+)\((.+)\)')
-        if title_author:
-            item['title'] = title_author[0]
-            item['author'] = title_author[1]
-        else:
-            item['title'] = link.xpath('text()').extract_first()
-
-        return item
+        item['url'] = response.url
+        item['title'] = response.css('div.son1>h1::text').extract_first()
+        son2 = response.css('div.son2>p')
+        for p in son2:
+            for name, field in {'朝代': 'dynasty', '作者': 'author'}.items():
+                if name in p.css('::text').extract_first():
+                    item[field] = p.css('::text').extract()[1]
+        item['content'] = ''.join(response.css('div.son2::text').extract()).strip()
+        yield item
