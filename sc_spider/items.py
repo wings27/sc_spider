@@ -16,6 +16,7 @@ class ScSpiderItem(scrapy.Item):
 
 class SongCiItem(scrapy.Item):
     url = scrapy.Field()
+    tune_name = scrapy.Field()
     title = scrapy.Field()
     dynasty = scrapy.Field()
     author = scrapy.Field()

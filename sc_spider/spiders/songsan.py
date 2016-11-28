@@ -41,7 +41,13 @@ class SongSanSpider(scrapy.Spider):
     def parse_songci(response):
         item = SongCiItem()
         item['url'] = response.url
-        item['title'] = response.css('div.son1>h1::text').extract_first()
+        full_title = response.css('div.son1>h1::text').extract_first()
+        if full_title:
+            try:
+                item['tune_name'], item['title'] = full_title.split('·')
+            except ValueError:
+                item['title'] = full_title
+
         son2 = response.css('div.son2>p')
         for p in son2:
             for name, field in {'朝代': 'dynasty', '作者': 'author'}.items():
