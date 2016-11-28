@@ -53,5 +53,7 @@ class SongSanSpider(scrapy.Spider):
             for name, field in {'朝代': 'dynasty', '作者': 'author'}.items():
                 if name in p.css('::text').extract_first():
                     item[field] = p.css('::text').extract()[1]
-        item['content'] = ''.join(response.css('div.son2::text').extract()).strip()
-        yield item
+        content = ''.join(response.css('div.son2::text').extract()).strip()
+        if content:
+            item['content'] = content
+            yield item
