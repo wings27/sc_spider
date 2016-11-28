@@ -22,7 +22,9 @@ NEWSPIDER_MODULE = 'sc_spider.spiders'
 ROBOTSTXT_OBEY = True
 
 FEED_EXPORTERS = {
-    'json': 'sc_spider.item_exporter.UnicodeJsonItemExporter'
+    'json': 'sc_spider.item_exporters.UnicodeJsonItemExporter',
+    'jl': 'sc_spider.item_exporters.UnicodeJsonLinesItemExporter',
+
 }
 
 # Configure maximum concurrent requests performed by Scrapy (default: 16)
