@@ -5,6 +5,7 @@
 # Don't forget to add your pipeline to the ITEM_PIPELINES setting
 # See: http://doc.scrapy.org/en/latest/topics/item-pipeline.html
 from pymongo import MongoClient
+from scrapy.exceptions import DropItem
 
 
 class MongoDBPipeline(object):
@@ -30,5 +31,9 @@ class MongoDBPipeline(object):
 
     def process_item(self, item, spider):
         collection = self.db[spider.name]
-        collection.update({'url': item['url']}, dict(item), upsert=True)
+        criteria = {'url': item['url']}
+
+        if collection.find(criteria).count() > 0:
+            raise DropItem("Duplicate item occurred: %s" % criteria)
+        collection.update(criteria, dict(item), upsert=True)
         return item
