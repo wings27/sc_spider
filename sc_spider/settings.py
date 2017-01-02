@@ -73,7 +73,7 @@ ITEM_PIPELINES = {
     'sc_spider.pipelines.MongoDBPipeline': 300,
 }
 
-MONGO_URI = 'localhost:27017'
+MONGO_URI = 'mongo:27017'
 MONGO_DB = 'songci'
 
 # Enable and configure the AutoThrottle extension (disabled by default)
