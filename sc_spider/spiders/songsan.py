@@ -14,7 +14,7 @@ class SongSanSpider(scrapy.Spider):
         'http://www.gushiwen.org/gushi/songsan.aspx',
     )
 
-    STORAGE_PATH = './out/'
+    STORAGE_PATH = '../out/'
 
     def __init__(self, name=None, **kwargs):
         super().__init__(name, **kwargs)
