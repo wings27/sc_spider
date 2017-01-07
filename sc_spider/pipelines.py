@@ -23,8 +23,8 @@ class MongoDBPipeline(object):
         )
 
     def open_spider(self, spider):
-        logging.info('Opened spider: %s.', spider)
-        logging.info('Using mongo address: %s', self.client.address)
+        spider.logger.info('Opened spider: %s.', spider)
+        spider.logger.info('Using mongo address: %s', self.client.address)
 
     def close_spider(self, spider):
         self.client.close()
