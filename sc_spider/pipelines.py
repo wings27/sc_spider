@@ -4,16 +4,16 @@
 #
 # Don't forget to add your pipeline to the ITEM_PIPELINES setting
 # See: http://doc.scrapy.org/en/latest/topics/item-pipeline.html
+import logging
+
 from pymongo import MongoClient
-from scrapy.exceptions import DropItem
+from pymongo.errors import ServerSelectionTimeoutError
 
 
 class MongoDBPipeline(object):
     def __init__(self, mongo_uri, mongo_db):
-        self.mongo_uri = mongo_uri
-        self.mongo_db = mongo_db
-        self.client = None
-        self.db = None
+        self.client = MongoClient(mongo_uri)
+        self.db = self.client[mongo_db]
 
     @classmethod
     def from_crawler(cls, crawler):
@@ -23,17 +23,20 @@ class MongoDBPipeline(object):
         )
 
     def open_spider(self, spider):
-        self.client = MongoClient(self.mongo_uri)
-        self.db = self.client[self.mongo_db]
+        logging.info('Opened spider: %s.', spider)
+        logging.info('Using mongo address: %s', self.client.address)
 
     def close_spider(self, spider):
         self.client.close()
 
     def process_item(self, item, spider):
         collection = self.db[spider.name]
-        criteria = {'url': item['url']}
-
-        if collection.find(criteria).count() > 0:
-            raise DropItem("Duplicate item occurred: %s" % criteria)
-        collection.update(criteria, dict(item), upsert=True)
+        self.save_item(collection, item)
         return item
+
+    @staticmethod
+    def save_item(collection, item):
+        try:
+            collection.update({'url': item['url']}, dict(item), upsert=True)
+        except ServerSelectionTimeoutError as e:
+            logging.error('Fail to connect to mongodb. %s', e)
