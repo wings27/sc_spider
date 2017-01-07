@@ -24,9 +24,9 @@ class SongSanSpider(scrapy.Spider):
     def parse(self, response):
         filename = self.STORAGE_PATH + page_name_from_url(response.url)
         with open(filename, 'wb') as f:
-            self.logger.debug('saving page: %s', filename)
+            self.logger.debug('Saving page: %s', filename)
             f.write(response.body)
-            self.logger.info('page save: %s', filename)
+            self.logger.info('Page saved: %s', filename)
 
         cont2s = response.xpath('//div[@class="guwencont2"]')
         for cont2 in cont2s:
