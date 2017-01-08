@@ -1,17 +1,26 @@
 # -*- coding: utf-8 -*-
 import os
+import urllib.parse
 
-import scrapy
+from scrapy.linkextractors import LinkExtractor
+from scrapy.spiders import CrawlSpider
+from scrapy.spiders import Rule
 
 from sc_spider.items import SongCiItem
-from sc_spider.spiders.spider_utils import page_name_from_url
+from sc_spider.spiders.spider_utils import ignore_case_re
 
 
-class SongSanSpider(scrapy.Spider):
+class SongSanSpider(CrawlSpider):
     name = "songsan"
     allowed_domains = ["gushiwen.org"]
     start_urls = (
         'http://www.gushiwen.org/gushi/songsan.aspx',
+        'http://so.gushiwen.org/type.aspx?p=1&x=词',
+    )
+
+    rules = (
+        Rule(LinkExtractor(allow='/view_.+\\.aspx'), callback='parse_songci'),
+        Rule(LinkExtractor(allow=ignore_case_re('/type\\.aspx.*x=' + urllib.parse.quote('词')))),
     )
 
     STORAGE_PATH = '../out/'
@@ -21,24 +30,7 @@ class SongSanSpider(scrapy.Spider):
         if not os.path.exists(self.STORAGE_PATH):
             os.makedirs(self.STORAGE_PATH)
 
-    def parse(self, response):
-        filename = self.STORAGE_PATH + page_name_from_url(response.url)
-        with open(filename, 'wb') as f:
-            self.logger.debug('Saving page: %s', filename)
-            f.write(response.body)
-            self.logger.info('Page saved: %s', filename)
-
-        cont2s = response.xpath('//div[@class="guwencont2"]')
-        for cont2 in cont2s:
-            links = cont2.xpath('a')
-            for link in links:
-                url = link.xpath('@href').extract_first()
-                if url is not None:
-                    next_url = response.urljoin(url)
-                    yield scrapy.Request(next_url, callback=SongSanSpider.parse_songci)
-
-    @staticmethod
-    def parse_songci(response):
+    def parse_songci(self, response):
         item = SongCiItem()
         item['url'] = response.url
         full_title = response.css('div.son1>h1::text').extract_first()
@@ -48,12 +40,18 @@ class SongSanSpider(scrapy.Spider):
             except ValueError:
                 item['title'] = full_title
 
-        son2 = response.css('div.son2>p')
-        for p in son2:
+        son2_p = response.css('div.son2>p')
+        for p in son2_p:
             for name, field in {'朝代': 'dynasty', '作者': 'author'}.items():
                 if name in p.css('::text').extract_first():
                     item[field] = p.css('::text').extract()[1]
         content = ''.join(response.css('div.son2::text').extract()).strip()
         if content:
             item['content'] = content
-            yield item
+        else:
+            all_p = son2_p.css('::text').extract()
+            try:
+                item['content'] = '\n'.join(all_p[all_p.index('原文：') + 1:]).strip()
+            except ValueError:
+                self.logger.error('Cannot parse item. url=%s', response.url)
+        yield item
