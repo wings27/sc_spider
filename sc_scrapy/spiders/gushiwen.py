@@ -1,17 +1,16 @@
 # -*- coding: utf-8 -*-
-import os
 import urllib.parse
 
 from scrapy.linkextractors import LinkExtractor
 from scrapy.spiders import CrawlSpider
 from scrapy.spiders import Rule
 
-from sc_spider.items import SongCiItem
-from sc_spider.spiders.spider_utils import ignore_case_re
+from sc_scrapy.items import SongCiItem
+from sc_scrapy.spiders.spider_utils import ignore_case_re
 
 
-class SongSanSpider(CrawlSpider):
-    name = "songsan"
+class GushiwenSpider(CrawlSpider):
+    name = "gushiwen"
     allowed_domains = ["gushiwen.org"]
     start_urls = (
         'http://www.gushiwen.org/gushi/songsan.aspx',
@@ -22,13 +21,6 @@ class SongSanSpider(CrawlSpider):
         Rule(LinkExtractor(allow='/view_.+\\.aspx'), callback='parse_songci'),
         Rule(LinkExtractor(allow=ignore_case_re('/type\\.aspx.*x=' + urllib.parse.quote('词')))),
     )
-
-    STORAGE_PATH = '../out/'
-
-    def __init__(self, name=None, **kwargs):
-        super().__init__(name, **kwargs)
-        if not os.path.exists(self.STORAGE_PATH):
-            os.makedirs(self.STORAGE_PATH)
 
     def parse_songci(self, response):
         item = SongCiItem()

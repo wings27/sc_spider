@@ -7,7 +7,7 @@ web:
   working_dir: /app
   volumes: 
     - .:/app
-  command: python sc_spider/execute.py crawl songsan -o out/items.jl
+  command: python sc_scrapy/execute.py
 mongo:
   image: mongo
   volumes:

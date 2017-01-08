@@ -11,6 +11,8 @@ from pymongo.errors import ServerSelectionTimeoutError
 
 
 class MongoDBPipeline(object):
+    COLLECTION_NAME = 'songci_content'
+
     def __init__(self, mongo_uri, mongo_db):
         self.client = MongoClient(mongo_uri)
         self.db = self.client[mongo_db]
@@ -30,7 +32,7 @@ class MongoDBPipeline(object):
         self.client.close()
 
     def process_item(self, item, spider):
-        collection = self.db[spider.name]
+        collection = self.db[self.COLLECTION_NAME]
         self.save_item(collection, item)
         return item
 

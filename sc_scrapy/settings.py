@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-# Scrapy settings for sc_spider project
+# Scrapy settings for sc_scrapy project
 #
 # For simplicity, this file contains only settings considered important or
 # commonly used. You can find more settings consulting the documentation:
@@ -10,20 +10,22 @@
 #     http://scrapy.readthedocs.org/en/latest/topics/spider-middleware.html
 import logging
 
-BOT_NAME = 'sc_spider'
+BOT_NAME = 'sc_scrapy'
 
-SPIDER_MODULES = ['sc_spider.spiders']
-NEWSPIDER_MODULE = 'sc_spider.spiders'
+SPIDER_MODULES = ['sc_scrapy.spiders']
+NEWSPIDER_MODULE = 'sc_scrapy.spiders'
+
+JOBDIR = './out/job_sc_scrapy'
 
 # Crawl responsibly by identifying yourself (and your website) on the user-agent
-# USER_AGENT = 'sc_spider (+http://www.yourdomain.com)'
+# USER_AGENT = 'sc_scrapy (+http://www.yourdomain.com)'
 
 # Obey robots.txt rules
 ROBOTSTXT_OBEY = True
 
 FEED_EXPORTERS = {
-    'json': 'sc_spider.item_exporters.UnicodeJsonItemExporter',
-    'jl': 'sc_spider.item_exporters.UnicodeJsonLinesItemExporter',
+    'json': 'sc_scrapy.item_exporters.UnicodeJsonItemExporter',
+    'jl': 'sc_scrapy.item_exporters.UnicodeJsonLinesItemExporter',
 
 }
 
@@ -53,13 +55,13 @@ FEED_EXPORTERS = {
 # Enable or disable spider middlewares
 # See http://scrapy.readthedocs.org/en/latest/topics/spider-middleware.html
 # SPIDER_MIDDLEWARES = {
-#    'sc_spider.middlewares.MyCustomSpiderMiddleware': 543,
+#    'sc_scrapy.middlewares.MyCustomSpiderMiddleware': 543,
 # }
 
 # Enable or disable downloader middlewares
 # See http://scrapy.readthedocs.org/en/latest/topics/downloader-middleware.html
 # DOWNLOADER_MIDDLEWARES = {
-#    'sc_spider.middlewares.MyCustomDownloaderMiddleware': 543,
+#    'sc_scrapy.middlewares.MyCustomDownloaderMiddleware': 543,
 # }
 
 # Enable or disable extensions
@@ -71,7 +73,7 @@ FEED_EXPORTERS = {
 # Configure item pipelines
 # See http://scrapy.readthedocs.org/en/latest/topics/item-pipeline.html
 ITEM_PIPELINES = {
-    'sc_spider.pipelines.MongoDBPipeline': 300,
+    'sc_scrapy.pipelines.MongoDBPipeline': 300,
 }
 
 MONGO_URI = 'mongo:27017'
