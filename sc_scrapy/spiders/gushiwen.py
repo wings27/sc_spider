@@ -41,9 +41,9 @@ class GushiwenSpider(CrawlSpider):
         if content:
             item['content'] = content
         else:
-            all_p = son2_p.css('::text').extract()
+            all_p_texts = son2_p.css('::text').extract()
             try:
-                item['content'] = '\n'.join(all_p[all_p.index('原文：') + 1:]).strip()
+                item['content'] = '\n'.join(all_p_texts[all_p_texts.index('原文：') + 1:]).strip()
             except ValueError:
                 self.logger.error('Cannot parse item. url=%s', response.url)
         yield item
