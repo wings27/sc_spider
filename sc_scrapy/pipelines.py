@@ -1,9 +1,4 @@
 # -*- coding: utf-8 -*-
-
-# Define your item pipelines here
-#
-# Don't forget to add your pipeline to the ITEM_PIPELINES setting
-# See: http://doc.scrapy.org/en/latest/topics/item-pipeline.html
 import logging
 
 from pymongo import MongoClient
@@ -11,17 +6,17 @@ from pymongo.errors import ServerSelectionTimeoutError
 
 
 class MongoDBPipeline(object):
-    COLLECTION_NAME = 'songci_content'
-
-    def __init__(self, mongo_uri, mongo_db):
+    def __init__(self, mongo_uri, mongo_db, collection_name):
         self.client = MongoClient(mongo_uri)
         self.db = self.client[mongo_db]
+        self.collection = self.db[collection_name]
 
     @classmethod
     def from_crawler(cls, crawler):
         return cls(
             mongo_uri=crawler.settings.get('MONGO_URI'),
             mongo_db=crawler.settings.get('MONGO_DB', 'songci'),
+            collection_name=crawler.settings.get('MONGO_SONGCI_COLLECTION', 'songci_content'),
         )
 
     def open_spider(self, spider):
@@ -32,13 +27,11 @@ class MongoDBPipeline(object):
         self.client.close()
 
     def process_item(self, item, spider):
-        collection = self.db[self.COLLECTION_NAME]
-        self.save_item(collection, item)
+        self.save_item(item)
         return item
 
-    @staticmethod
-    def save_item(collection, item):
+    def save_item(self, item):
         try:
-            collection.update({'url': item['url']}, dict(item), upsert=True)
+            self.collection.update({'url': item['url']}, dict(item), upsert=True)
         except ServerSelectionTimeoutError as e:
             logging.error('Fail to connect to mongodb. %s', e)

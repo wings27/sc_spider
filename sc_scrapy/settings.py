@@ -78,6 +78,7 @@ ITEM_PIPELINES = {
 
 MONGO_URI = 'mongo:27017'
 MONGO_DB = 'songci'
+MONGO_SONGCI_COLLECTION = 'songci_content'
 
 # Enable and configure the AutoThrottle extension (disabled by default)
 # See http://doc.scrapy.org/en/latest/topics/autothrottle.html
