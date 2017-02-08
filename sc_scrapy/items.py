@@ -8,12 +8,6 @@
 import scrapy
 
 
-class ScSpiderItem(scrapy.Item):
-    # define the fields for your item here like:
-    # name = scrapy.Field()
-    pass
-
-
 class SongCiItem(scrapy.Item):
     url = scrapy.Field()
     tune_name = scrapy.Field()
