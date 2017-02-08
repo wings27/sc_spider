@@ -1,11 +1,14 @@
 # sc_spider
-宋词爬虫
+Chinese: 宋词爬虫
+
+## Overview
+A spider based on [scrapy](https://github.com/scrapy/scrapy) to crawl [SongCi](https://en.wikipedia.org/wiki/Ci_(poetry)) from web.
 
 ## Usage
-
-### Dependencies
+### Requirements
 1. Install mongodb
-2. (Optional) Docker && Docker-compose.
+2. `pip install -r requirements.txt`
+3. (Optional) Docker && Docker-compose.
 
 ### How to Run
 
