@@ -9,7 +9,7 @@ A spider based on [scrapy](https://github.com/scrapy/scrapy) to crawl [SongCi](h
 
 ### Requirements
 1. Install mongodb
-2. `pip install -r requirements.txt`
+2. `pip install -r requirements.txt` Or using conda: `conda env create -f environment.yml`
 3. (Optional) Docker && Docker-compose.
 
 ### How to Run
