@@ -37,7 +37,7 @@ class GushiwenSpider(CrawlSpider):
             for name, field in {'朝代': 'dynasty', '作者': 'author'}.items():
                 if name in p.css('::text').extract_first():
                     item[field] = p.css('::text').extract()[1]
-        content = ''.join(response.css('div.son2::text').extract()).strip()
+        content = ''.join(response.css('div#cont::text').extract()).strip()
         if content:
             item['content'] = content
         else:
