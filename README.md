@@ -21,6 +21,8 @@ However, using docker is the recommended way, as you don't need to bother instal
 ### Docker
 
 1. Install Docker && Docker-compose.
+2. (Optional) Run `docker-compose build` in case of environment updates.
+3. Run sc_spider:
 
 ```bash
 docker-compose up
@@ -30,6 +32,7 @@ docker-compose up
 
 1. Install MongoDB
 2. Install project requirements: `pip install -r requirements.txt`
+3. Run sc_spider:
 
 ```bash
 cd sc_scrapy
@@ -43,6 +46,7 @@ scrapy crawl gushiwen -s MONGO_URI=localhost:27017
 3. Edit your hosts file, adding: `127.0.0.1  mongo`
 Or
 4. Modify `MONGO_URI` settings in `sc_scrapy/settings.py`.
+5. Run sc_spider:
 
 ```bash
 cd sc_scrapy
@@ -58,3 +62,13 @@ python execute.py
 ## Releases
 
 You can download the latest stable releases from: https://github.com/wings27/sc_spider/releases
+
+## Contributing
+
+All contributions are welcomed: you can add new spiders, create enhancements patches or resolve issues.
+
+However, please follow these conventions:
+
+* Your coding style should follow [PEP 8](https://www.python.org/dev/peps/pep-0008)
+* Spiders should only crawl for SongCi related contents
+* Spiders should obey robots.txt rules
