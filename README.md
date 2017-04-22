@@ -16,7 +16,7 @@ Results can be saved into multiple formats of files, as well as into [MongoDB](h
 
 You may choose one of the following methods.
 
-However, using docker is the recommended way, as you don't need to bother installing MongoDB and other stuff.
+However, using docker is the recommended way, as you don't need to bother installing and configuring MongoDB and other stuff.
 
 ### Docker
 
