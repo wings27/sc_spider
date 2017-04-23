@@ -14,9 +14,9 @@ Results can be saved into multiple formats of files, as well as into [MongoDB](h
 
 ## Usage
 
-You may choose one of the following methods.
+You may choose one of the following methods to run this project.
 
-However, using docker is the recommended way, as you don't need to bother installing and configuring MongoDB and other stuff.
+Using docker is the recommended way, as you don't need to bother installing and configuring MongoDB and other stuff.
 
 ### Docker
 
